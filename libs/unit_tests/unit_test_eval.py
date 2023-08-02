@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 import unittest
-from eval_lib import get_evaluation, is_forced_mate
+from eval_lib import get_evaluation, is_forced_mate, is_mate
 import logging
 
 class Tests_Eval_Mate(unittest.TestCase):
@@ -46,6 +46,13 @@ class Tests_Eval_Mate(unittest.TestCase):
             result = is_forced_mate(test)
             self.assertEqual(result, self.tests_forced_mate_results[index])
             result = is_forced_mate(-test)
+            self.assertEqual(result, self.tests_forced_mate_results[index])
+
+    def test_is_mate(self):
+        for index, test in enumerate(self.tests_forced_mate):
+            result = is_mate(test*3)
+            self.assertEqual(result, self.tests_forced_mate_results[index])
+            result = is_mate(-test*3)
             self.assertEqual(result, self.tests_forced_mate_results[index])
         
 def setup_logging():
