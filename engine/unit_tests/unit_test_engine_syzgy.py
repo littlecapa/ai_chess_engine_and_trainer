@@ -3,22 +3,28 @@ sys.path.append('..')
 import unittest
 from chess_engine_syzygy import ChessEngineSyzygy
 import logging
+from chess import Move
 
 class Tests_Engine_SYZYGY(unittest.TestCase):
     
     def __init__(self, methodName='runTest', custom_arg=None):
         super().__init__(methodName)
-        print("Setup")
         self.engine = ChessEngineSyzygy()
 
     def test_setup_from_fen(self):
         fen_str = "R7/1K6/8/8/8/8/8/7k w - - 0 1"
         self.engine.setup_from_fen(fen_str)
-        print(self.engine.get_best_move())
+        eval, move, best_distance = self.engine.get_best_move()
+        self.assertEqual(eval, 5800.0)
+        self.assertEqual(move.uci(), "a8g8")
+        self.assertEqual(best_distance, 18)
 
         fen_str = "R7/1K6/8/8/8/8/8/7k b - - 0 1"
         self.engine.setup_from_fen(fen_str)
-        print(self.engine.get_best_move())
+        eval, move, best_distance = self.engine.get_best_move()
+        self.assertEqual(eval, -5300.0)
+        self.assertEqual(move.uci(), "h1g2")
+        self.assertEqual(best_distance, -23)
  
 def setup_logging():
     logging.basicConfig(
