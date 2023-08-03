@@ -20,6 +20,20 @@ class ChessEngineSyzygy(ChessEngine):
         self.tablebases.add_directory(SYZYGY_PATH)
         self.max_pieces = max_pieces 
 
+    def distance_to_eval(self, distance):
+        if distance != 0:
+            return get_evaluation(None, distance)
+        else:
+            return get_evaluation(0, None)
+    
+    def position_to_dist(self, board):
+        return self.tablebases.probe_dtz(board)
+
+    def position_to_dist_eval(self, board):
+        distance = self.position_to_dist(board)
+        eval = self.distance_to_eval(self, distance)
+        return distance, eval
+
     def find_best_move(self, eval_list):
         min_pos_index = -1
         min_pos_value = 999
@@ -41,25 +55,28 @@ class ChessEngineSyzygy(ChessEngine):
             return max_neg_index, max_neg_value
         
     def get_best_move(self):
+        # Check, if Game is over
         eval, move, shortest_distance = super().get_best_move()
         if eval != None:
             return eval, move, shortest_distance
+        distance = self.tablebases.probe_dtz(self.board)
+        logging.info(f"Distance: {distance}")
         # Generate all legal moves
         legal_moves = self.get_move_list(evaluated = False)
         # Initialize variables
         best_move = None
-        # Iterate through each legal move
-        distance_list = []
         for move in legal_moves:
             temp_board = self.make_move(move)
-            distance = -self.tablebases.probe_dtz(temp_board)
-            distance_list.append(distance)
-            logging.info(f"Move: {move}, Distance: {distance}")
-        logging.info(f"List: {distance_list}")
-        index, best_distance = self.find_best_move(distance_list)
-        logging.info(f"Results: {index}, {best_distance}")
-        if best_distance != 0:
-            eval = get_evaluation(None, best_distance)
-        else:
-            eval = get_evaluation(0, None)
-        return eval, legal_moves[index], best_distance
+            new_distance = -self.tablebases.probe_dtz(temp_board)
+            logging.info(f"New Distance: {new_distance} {move}")
+            if new_distance == distance == 0:
+                best_move = move
+                break
+            if (abs(distance)-1) == (abs(new_distance)):
+                best_move = move
+                break
+        if best_move is None:
+            logging.debug(f"No best move")
+            raise ValueError("No best move")
+        eval = self.distance_to_eval(distance)
+        return eval, best_move, distance
