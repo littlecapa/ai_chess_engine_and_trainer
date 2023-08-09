@@ -1,7 +1,7 @@
 import chess
 import chess.syzygy
 
-from chess_engine import ChessEngine
+from engine.chess_engine import ChessEngine
 
 import sys
 sys.path.append("/Users/littlecapa/GIT/python/ai_chess_engine_and_trainer/libs")
@@ -56,11 +56,12 @@ class ChessEngineSyzygy(ChessEngine):
         
     def get_best_move(self):
         # Check, if Game is over
+        logging.debug(f"Find best Move in: {self.board.fen()}")
         eval, move, shortest_distance = super().get_best_move()
         if eval != None:
             return eval, move, shortest_distance
         distance = self.tablebases.probe_dtz(self.board)
-        logging.info(f"Distance: {distance}")
+        logging.debug(f"Distance: {distance}")
         # Generate all legal moves
         legal_moves = self.get_move_list(evaluated = False)
         # Initialize variables
@@ -68,15 +69,16 @@ class ChessEngineSyzygy(ChessEngine):
         for move in legal_moves:
             temp_board = self.make_move(move)
             new_distance = -self.tablebases.probe_dtz(temp_board)
-            logging.info(f"New Distance: {new_distance} {move}")
-            if new_distance == distance == 0:
-                best_move = move
-                break
+            logging.info(f"New Distance: {distance} {new_distance} {move}")
+            if new_distance == distance:
+                if abs(new_distance <= 1):
+                    best_move = move
+                    break
             if (abs(distance)-1) == (abs(new_distance)):
                 best_move = move
                 break
         if best_move is None:
             logging.debug(f"No best move")
-            raise ValueError("No best move")
+            raise ValueError(f"No best move, {self.board.fen()}")
         eval = self.distance_to_eval(distance)
         return eval, best_move, distance

@@ -11,6 +11,7 @@ class Tests_Eval_Mate(unittest.TestCase):
     def test_kkr_position(self):
         board = set_kkr_position("a1", "c3", "b2")
         self.assertEqual(board.is_valid(), True)
+        self.assertEqual(board.turn, chess.WHITE)
         board = set_kkr_position("a1", "b2", "c3")
         self.assertEqual(board, None)
 
