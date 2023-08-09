@@ -3,6 +3,7 @@ sys.path.append('..')
 import unittest
 from fen_lib import split_fen, flip_color_position, flip_color_to_move, flip_castling_options, flip_en_passant_square, flip_color
 import logging
+from log_lib import setup_logging
 
 class Tests_Eval_Mate(unittest.TestCase):
 
@@ -39,14 +40,6 @@ class Tests_Eval_Mate(unittest.TestCase):
         new_fen = flip_color(self.TEST_FEN.replace('k', '-'))
         self.assertEqual(new_fen, self.EXPECTED_RESULT_FEN.replace('K', '-'))
         
-def setup_logging():
-    logging.basicConfig(
-        filename='app.log',  # Change this to your desired log file path
-        level=logging.INFO,  # Change the log level as needed (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-        format='%(asctime)s [%(levelname)s]: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-
 if __name__ == '__main__':
     setup_logging()
     logging.info("Start Tests")
