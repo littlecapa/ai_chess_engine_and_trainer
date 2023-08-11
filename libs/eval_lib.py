@@ -3,7 +3,8 @@ EVAL_LIMIT = 15.0
 EVAL_FACTOR = 100.0
 MATE_STEP = 1
 MIN_FORCED_MATE = 25
-MAX_MATE_STEPS = 50
+# 50 Moves means 100 Halfmoves
+MAX_MATE_STEPS = 100
 MATE_IN_ONE_VALUE = MIN_FORCED_MATE + MAX_MATE_STEPS * MATE_STEP
 IS_MATE = 2 * MATE_IN_ONE_VALUE
 import logging
@@ -25,6 +26,10 @@ def get_high_eval_add(abs_eval):
 def get_mate_eval(mate):
     logging.info(f"Mate in: {mate}")
     sign_mate, abs_mate = get_sign_abs(mate)
+    if abs(mate) == 1:
+        return sign_mate * IS_MATE
+    elif abs(mate) == 2:
+        return sign_mate * MATE_IN_ONE_VALUE
     abs_mate -= 1
     abs_mate = min(MAX_MATE_STEPS, abs_mate)
     mate_eval = MIN_FORCED_MATE + (MAX_MATE_STEPS-abs_mate) * MATE_STEP
@@ -53,4 +58,7 @@ def is_mate(eval):
     return abs(eval) >= format_value(MATE_IN_ONE_VALUE)
 
 def get_is_mate_value():
-    return IS_MATE
+    return IS_MATE * EVAL_FACTOR
+
+def get_mate_in_one_value():
+    return MATE_IN_ONE_VALUE * EVAL_FACTOR

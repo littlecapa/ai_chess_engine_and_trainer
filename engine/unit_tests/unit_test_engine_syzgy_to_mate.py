@@ -1,9 +1,7 @@
-import sys
-sys.path.append('..')
-sys.path.append('/Users/littlecapa/GIT/python/ai_chess_engine_and_trainer')
 import unittest
-from chess_engine_syzygy import ChessEngineSyzygy
+from engine.chess_engine_syzygy import ChessEngineSyzygy
 from libs.log_lib import setup_logging
+from libs.eval_lib import get_is_mate_value
 import logging
 from chess import Move
 
@@ -17,14 +15,14 @@ class Tests_Engine_SYZYGY(unittest.TestCase):
         fen_str = "R7/1K6/8/8/8/8/8/7k w - - 0 1"
         self.engine.setup_from_fen(fen_str)
         eval, move, best_distance = self.engine.get_best_move()
-        self.assertEqual(eval, 5700.0)
+        self.assertEqual(eval, 10700.0)
         self.assertEqual(move.uci(), "a8g8")
         self.assertEqual(best_distance, 19)
 
         fen_str = "R7/1K6/8/8/8/8/8/7k b - - 0 1"
         self.engine.setup_from_fen(fen_str)
         eval, move, best_distance = self.engine.get_best_move()
-        self.assertEqual(eval, -5200.0)
+        self.assertEqual(eval, -10200.0)
         self.assertEqual(move.uci(), "h1g2")
         self.assertEqual(best_distance, -24)
     
@@ -32,7 +30,7 @@ class Tests_Engine_SYZYGY(unittest.TestCase):
         fen_str = "8/5K1k/8/5R2/8/8/8/8 w - - 0 1"
         self.engine.setup_from_fen(fen_str)
         eval, move, best_distance = self.engine.get_best_move()
-        self.assertEqual(eval, 7500.0)
+        self.assertEqual(eval, get_is_mate_value())
         self.assertEqual(move.uci(), "f5h5")
         self.assertEqual(best_distance, 1)
 

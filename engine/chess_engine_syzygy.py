@@ -69,7 +69,7 @@ class ChessEngineSyzygy(ChessEngine):
         for move in legal_moves:
             temp_board = self.make_move(move)
             new_distance = -self.tablebases.probe_dtz(temp_board)
-            logging.info(f"New Distance: {distance} {new_distance} {move}")
+            logging.debug(f"New Distance: {distance} {new_distance} {move}")
             if new_distance == distance:
                 if abs(new_distance <= 1):
                     best_move = move

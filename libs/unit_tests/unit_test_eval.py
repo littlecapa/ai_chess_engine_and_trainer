@@ -1,8 +1,6 @@
-import sys
-sys.path.append('..')
 import unittest
-from eval_lib import get_evaluation, is_forced_mate, is_mate
-from log_lib import setup_logging
+from libs.eval_lib import get_evaluation, is_forced_mate, is_mate, get_is_mate_value, get_mate_in_one_value
+from libs.log_lib import setup_logging
 import logging
 
 class Tests_Eval_Mate(unittest.TestCase):
@@ -26,8 +24,8 @@ class Tests_Eval_Mate(unittest.TestCase):
         result = get_evaluation("",None)
         self.assertEqual(result, 0.00)
 
-    tests_mate = [0, 1, 2, 3, 4, 51, 50, 49, 48, 47, 18, 17, 16, 15, +22]
-    tests_mate_results = [0.0, 7500, 7400, 7300, 7200, 2500, 2600, 2700, 2800, 2900, 5800, 5900, 6000, 6100, 5400]
+    tests_mate = [0, 1, 2, 3, 4, 52, 51, 50, 49, 18, 17, 16, 15, +22, -1, -2, -50, -51, -52, 98, 99, 100, 101, 102]
+    tests_mate_results = [0.0, get_is_mate_value(), get_mate_in_one_value(), 12300, 12200, 7400, 7500, 7600, 7700, 10800, 10900, 11000, 11100, 10400, -get_is_mate_value(), -12500, -7600, -7500, -7400, 2800, 2700, 2600, 2500, 2500]
 
     def test_mate_evaluation(self):
         for index, test in enumerate(self.tests_mate):
@@ -51,9 +49,9 @@ class Tests_Eval_Mate(unittest.TestCase):
 
     def test_is_mate(self):
         for index, test in enumerate(self.tests_forced_mate):
-            result = is_mate(test*3)
+            result = is_mate(test*5)
             self.assertEqual(result, self.tests_forced_mate_results[index])
-            result = is_mate(-test*3)
+            result = is_mate(-test*5)
             self.assertEqual(result, self.tests_forced_mate_results[index])
 
 if __name__ == '__main__':

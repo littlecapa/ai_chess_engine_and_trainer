@@ -1,7 +1,7 @@
 import chess
 import random
 import logging
-from chess_lib import uci_to_square, generate_random_square, get_empty_board
+from libs.chess_lib import uci_to_square, generate_random_square, get_empty_board
 
 
 def set_kkr_position(white_king_position, black_king_position, white_rook_position):
@@ -20,6 +20,7 @@ def set_kkr_position(white_king_position, black_king_position, white_rook_positi
     square = uci_to_square(white_rook_position)
     # Position the piece on the board
     board.set_piece_at(square, piece)
+    board.turn = chess.WHITE
     if board.is_valid():
         return board
     return None
