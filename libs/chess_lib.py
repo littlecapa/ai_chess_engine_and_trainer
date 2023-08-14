@@ -18,3 +18,9 @@ EMPTY_FEN = "8/8/8/8/8/8/8/8 w - - 0 1"
 def get_empty_board():
 # Create an empty chess board
     return chess.Board(fen=EMPTY_FEN)
+
+def rank_file_from_square(square):
+    # Split the square into rank and file
+    rank = chess.square_rank(square)
+    file = chess.square_file(square)
+    return rank, file
