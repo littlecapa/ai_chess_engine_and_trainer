@@ -1,8 +1,6 @@
-import sys
-sys.path.append('..')
 import unittest
-from kkr_lib import set_kkr_position, set_random_kkr_position
-from log_lib import setup_logging
+from libs.kkr_lib import set_kkr_position, set_random_kkr_position
+from libs.log_lib import setup_logging
 import chess
 import logging
 
