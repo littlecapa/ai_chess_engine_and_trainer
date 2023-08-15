@@ -19,8 +19,8 @@ class Tests_Basic_Bitboard(unittest.TestCase):
         fen_with_en_passant = "rnbqkbnr/ppppp2p/5p2/5p2/8/8/PPPPPPPP/RNBQKBNR w KQkq f6 0 3"
         bb.setup_from_fen(fen_with_en_passant)
         repr_str = bb.__repr__()
-        bool_vector = bb.get_832xbool_vector()
-        bb.set_832xbool_vector(bool_vector)
+        bool_vector = bb.get_13_63_bool_vector()
+        bb.set_13_63_bool_vector(bool_vector)
         self.assertEqual(repr_str, bb.__repr__())
 
     def test_setup_from_fen(self):

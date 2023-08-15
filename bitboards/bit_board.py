@@ -8,8 +8,14 @@ from libs.chess_lib import turn_and_en_passant_square_bits_to_str, turn_and_en_p
 
 
 class Bitboard:
-    def __init__(self):
-        self.setup_empty_bitboard()
+    def __init__(self, board = None, fen = None):
+        if board == None:
+            if fen == None:
+                self.setup_empty_bitboard()
+            else:
+                self.setup_from_fen(fen)
+        else:
+            self.setup_from_chess_board(board)
         
     def setup_empty_bitboard(self):
         self.bitboard = np.zeros((13, 8, 8), dtype=bool)
@@ -86,10 +92,10 @@ class Bitboard:
     def get_13xint64_vector(self):
         pass
 
-    def get_832xbool_vector(self):
+    def get_13_63_bool_vector(self):
         return self.bitboard.reshape(-1)
     
-    def set_832xbool_vector(self, bit_vector):
+    def set_13_63_bool_vector(self, bit_vector):
         self.bitboard = bit_vector.reshape((13, 8, 8))
 
 
