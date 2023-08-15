@@ -8,6 +8,11 @@ def uci_to_square(uci):
     rank_index = int(uci[1]) - 1
     return chess.square(file_index, rank_index)
 
+def uci_to_bb_square(uci):
+    file_index = ord(uci[0]) - ord('a')
+    rank_index = int(uci[1]) - 1
+    return rank_index, file_index
+
 FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 def generate_random_square():
     random_file = random.choice(FILES)
@@ -42,7 +47,7 @@ def turn_and_en_passant_square_to_bits(board):
     en_passant_square = board.ep_square
     if en_passant_square is not None:
         bit_vector[1] = 1
-        rank, file = rank_file_from_square(en_passant_square)
+        _, file = rank_file_from_square(en_passant_square)
         bit_vector = int_to_3bit_vector(file, bit_vector, 2)
     return bit_vector
 
@@ -51,7 +56,6 @@ def int_to_3bit_vector(n, vector, start):
         vector[i] = n & 1
         n >>= 1
     return vector
-    
 
 def bit_vector_to_int(bit_vector):
     result = 0
@@ -74,3 +78,16 @@ def turn_and_en_passant_square_bits_to_str(bit_vector):
         square_index = chess.square(file, rank)
         string += f"EP: {chess.square_name(square_index)}"
     return string
+
+def piece2char(piece):
+    piece_chars = {
+            0: "P", 1: "N", 2: "B", 3: "R", 4: "Q", 5: "K", 
+            6: "p", 7: "n", 8: "b", 9: "r", 10: "q", 11: "k"
+                }
+    return piece_chars.get(piece, " ")
+
+def substitute_piece(string, position, piece):         
+    if position < 0 or position >= len(string):
+        return string  # Return the original string if position is out of range
+    else:
+        return string[:position] + piece2char(piece) + string[position+1:]
