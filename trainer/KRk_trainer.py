@@ -31,7 +31,7 @@ def main(collector, white, black):
         else:
             logging.debug(f"    {move}")
 
-nr_games = 1000
+nr_games = 10000
 
 if __name__ == '__main__':
     setup_logging()
