@@ -22,7 +22,7 @@ class Chess_Trainer():
   def init_components(self):
     self.machine = Eval_Net_KRk()
     self.machine.to(self.device)
-    self.optimizer = torch.optim.Adam(self.machine.parameters(), self.learning_rate, weight_decay=1e-5)
+    self.optimizer = torch.optim.Adam(self.machine.parameters(), self.learning_rate, weight_decay=1e-1)
     self.criterion = torch.nn.MSELoss(reduction='mean')
     torch.backends.cudnn.enabled = True
 
@@ -31,7 +31,6 @@ class Chess_Trainer():
     self.hash = self.machine.get_hash_value()
     print(f"Resting Hash: {self.hash}")
     self.machine.eval()
-    self.do_baseline_testing()
     self.machine = None
 
   def resume(self, eval = True):
